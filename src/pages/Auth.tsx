@@ -23,7 +23,7 @@ export default function Auth() {
       if (isLogin) {
         await signIn(email, password);
         toast.success('Sesión iniciada correctamente');
-        navigate('/admin');
+        navigate('/silvina-privado-gestion');
       } else {
         await signUp(email, password);
         toast.success('Cuenta creada. Revisa tu correo para confirmar.');
