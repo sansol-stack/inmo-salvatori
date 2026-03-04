@@ -62,8 +62,10 @@ export default function PropertyDetail() {
   }
 
   const images = property.image_urls?.length > 0 ? property.image_urls : ['/placeholder.svg'];
-  const whatsappUrl = `https://wa.me/54911XXXXXXXX?text=${encodeURIComponent(
-    `Hola Silvina, me interesa la propiedad "${property.title}" que vi en tu web.`
+  const currentUrl = window.location.href;
+
+  const whatsappUrl = `https://wa.me/+5493489497532?text=${encodeURIComponent(
+    `Hola Silvina, me interesa la propiedad "${property.title}" que vi en tu web.\n\nLink a la propiedad: ${currentUrl}`
   )}`;
 
   return (
