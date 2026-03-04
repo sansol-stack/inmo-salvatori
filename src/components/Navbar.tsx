@@ -79,7 +79,7 @@ export function Navbar() {
           </div>
           
           <a 
-            href="https://wa.me/54911XXXXXXXX" 
+            href="https://wa.me/+5493489497532" 
             target="_blank" 
             rel="noopener noreferrer"
             className={`flex items-center gap-2 px-6 py-2.5 rounded-none font-body text-xs font-bold uppercase tracking-widest transition-all shadow-lg ${

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Map as MapIcon, List as ListIcon } from "lucide-react";
 import { HeroSection } from "@/components/HeroSection"; // Importamos tu Hero original
 import PropertyMap from "@/components/PropertyMap";
+import { Footer } from "@/components/Footer";
 
 const Index = () => {
   const { data: properties, isLoading } = useProperties();
@@ -86,6 +87,7 @@ const Index = () => {
           </div>
         )}
       </main>
+        <Footer />
     </div>
   );
 };

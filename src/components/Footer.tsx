@@ -36,7 +36,7 @@ export function Footer() {
               <div className="p-2 bg-white/5 group-hover:bg-brand-magenta/10 transition-colors">
                 <Phone className="h-4 w-4 text-brand-magenta" />
               </div>
-              <span className="font-body text-sm">+54 9 3489 XXX-XXX</span>
+              <span className="font-body text-sm">+54 9 03489 49-7532</span>
             </div>
             <div className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group">
               <div className="p-2 bg-white/5 group-hover:bg-brand-magenta/10 transition-colors">
@@ -52,10 +52,10 @@ export function Footer() {
               Seguinos
             </h4>
             <div className="flex gap-4">
-              <a href="#" className="p-3 bg-white/5 hover:bg-brand-magenta transition-all duration-300 rounded-none group">
+              <a href="https://www.instagram.com/inmosilvinasalvatori" target='_blank' className="p-3 bg-white/5 hover:bg-brand-magenta transition-all duration-300 rounded-none group">
                 <Instagram className="h-5 w-5 text-white" />
               </a>
-              <a href="#" className="p-3 bg-white/5 hover:bg-brand-magenta transition-all duration-300 rounded-none group">
+              <a href="https://www.facebook.com/SilvinaSalvatoriInmobiliaria" target='_blank' className="p-3 bg-white/5 hover:bg-brand-magenta transition-all duration-300 rounded-none group">
                 <Facebook className="h-5 w-5 text-white" />
               </a>
             </div>
