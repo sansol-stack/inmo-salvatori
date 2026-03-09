@@ -85,7 +85,7 @@ function formatPrice(price: number, type: string, currency: string = 'ARS') {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <main className="pt-20 container mx-auto px-4 pb-12">
+      <main className="pt-28 container mx-auto px-4 pb-12">
         <div className="flex items-center justify-between mb-8">
           <h1 className="font-display text-3xl font-bold text-foreground">Panel de Administración</h1>
           <div className="flex gap-3">
@@ -96,7 +96,7 @@ function formatPrice(price: number, type: string, currency: string = 'ARS') {
               <Plus className="h-4 w-4 mr-2" /> Nueva Propiedad
             </Button>
             <Button variant="outline" onClick={() => signOut()} className="font-body">
-              <LogOut className="h-4 w-4 mr-2" /> Salir
+              <LogOut className="h-4 w-4 mr-2" /> Cerrar Sesión
             </Button>
           </div>
         </div>

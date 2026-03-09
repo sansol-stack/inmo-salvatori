@@ -22,6 +22,7 @@ export function AdminPropertyForm({ property, onSubmit, onCancel, loading }: Pro
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
+  const [isConsulting, setIsConsulting] = useState(false);
   const [currency, setCurrency] = useState<'ARS' | 'USD'>('ARS');
   const [location, setLocation] = useState('');
   
@@ -41,11 +42,12 @@ export function AdminPropertyForm({ property, onSubmit, onCancel, loading }: Pro
 
   useEffect(() => {
     if (property) {
-      setTitle(property.title);
-      setDescription(property.description || '');
-      setPrice(String(property.price));
-      // @ts-ignore
-      setCurrency(property.currency || 'ARS');
+    setTitle(property.title);
+    setDescription(property.description);
+    setPrice(property.price.toString());
+    // Si el precio es 0, activamos el switch de "Consultar"
+    setIsConsulting(property.price === 0); 
+    setCurrency(property.currency as 'ARS' | 'USD');
       setLocation(property.location);
       
       // Cargar coordenadas si existen
@@ -140,145 +142,187 @@ export function AdminPropertyForm({ property, onSubmit, onCancel, loading }: Pro
 };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-4xl mx-auto p-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        
-        {/* TITULO Y OPERACION */}
-        <div className="md:col-span-2 space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
-              <Label className="font-bold">Título de la Propiedad</Label>
-              <Input value={title} onChange={(e) => setTitle(e.target.value)} required placeholder="Ej: Casa Quinta con Pileta" />
-            </div>
-            <div>
-              <Label className="font-bold">Tipo</Label>
-              <Select value={type} onValueChange={(v: any) => setType(v)}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="sale">Venta</SelectItem>
-                  <SelectItem value="rent">Alquiler</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+    <form onSubmit={handleSubmit} className="space-y-8 max-w-4xl mx-auto p-4">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    
+    {/* TITULO Y OPERACION */}
+    <div className="md:col-span-2 space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="md:col-span-3">
+          <Label className="font-bold text-[10px] uppercase tracking-widest">Título de la Propiedad</Label>
+          <Input 
+            value={title} 
+            onChange={(e) => setTitle(e.target.value)} 
+            required 
+            placeholder="Ej: Casa Quinta con Pileta" 
+            className="mt-1"
+          />
         </div>
-
-        {/* PRECIO Y MONEDA */}
-        <div className="flex gap-4 items-end">
-          <div className="w-24">
-            <Label className="font-bold">Moneda</Label>
-            <Select value={currency} onValueChange={(v: any) => setCurrency(v)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ARS">ARS ($)</SelectItem>
-                <SelectItem value="USD">USD (U$S)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex-1">
-            <Label className="font-bold">Precio</Label>
-            <Input type="number" value={price} onChange={(e) => setPrice(e.target.value)} required />
-          </div>
-        </div>
-
-        {/* UBICACIÓN TEXTO */}
         <div>
-          <Label className="font-bold">Ubicación (Dirección/Barrio)</Label>
-          <Input value={location} onChange={(e) => setLocation(e.target.value)} required placeholder="Ej: Campana, Bº Dalmine" />
+          <Label className="font-bold text-[10px] uppercase tracking-widest">Operación</Label>
+          <Select value={type} onValueChange={(v: any) => setType(v)}>
+            <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="sale">Venta</SelectItem>
+              <SelectItem value="rent">Alquiler</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
+      </div>
+    </div>
 
-        {/* SECCIÓN GEOLOCALIZACIÓN INTELIGENTE */}
-        <div className="md:col-span-2 p-5 bg-brand-magenta/5 rounded-2xl border-2 border-dashed border-brand-magenta/20 space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-brand-magenta">
-              <MapPin className="h-5 w-5" />
-              <span className="text-sm font-bold uppercase tracking-tight">Punto exacto en Mapa</span>
-            </div>
-            {lat && <span className="text-[10px] bg-green-500 text-white px-2 py-0.5 rounded font-bold">✓ VÁLIDO</span>}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
-              <Label className="text-[10px] uppercase font-bold text-muted-foreground">Pegar Coordenadas de Google Maps</Label>
-              <Input 
-                value={rawCoords}
-                onChange={(e) => handleCoordsChange(e.target.value)}
-                placeholder="-34.123, -58.456"
-                className="bg-white border-brand-magenta/30"
-              />
-            </div>
-            <div className="flex items-end">
-              <Button
-                type="button"
-                variant="outline"
-                className="w-full text-[10px] font-bold uppercase h-10 hover:bg-brand-magenta hover:text-white"
-                disabled={!lat}
-                onClick={() => window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank')}
-              >
-                <ExternalLink className="h-3 w-3 mr-2" /> Probar Punto
-              </Button>
-            </div>
-          </div>
-        </div>
-
-        {/* AMBIENTES Y M2 */}
-        <div className="grid grid-cols-3 gap-4 md:col-span-2">
-          <div>
-            <Label>Ambientes</Label>
-            <Input type="number" value={rooms} onChange={(e) => setRooms(e.target.value)} />
-          </div>
-          <div>
-            <Label>Baños</Label>
-            <Input type="number" value={bathrooms} onChange={(e) => setBathrooms(e.target.value)} />
-          </div>
-          <div>
-            <Label>m² Totales</Label>
-            <Input type="number" value={sqft} onChange={(e) => setSqft(e.target.value)} />
-          </div>
+    {/* SECCIÓN PRECIO INTEGRADA */}
+    <div className="md:col-span-2 p-5 bg-brand-gray/5 border border-brand-light-gray space-y-4 rounded-lg">
+      <div className="flex items-center justify-between mb-2">
+        <Label className="font-bold text-[10px] uppercase tracking-widest text-brand-magenta">Información Financiera</Label>
+        <div className="flex items-center gap-2 bg-white px-3 py-1 border border-brand-light-gray shadow-sm rounded-lg">
+          <Switch 
+            id="consult" 
+            checked={isConsulting} 
+            onCheckedChange={(checked) => {
+              setIsConsulting(checked);
+              if (checked) setPrice('0');
+            }} 
+          />
+          <Label htmlFor="consult" className="text-[10px] font-bold uppercase cursor-pointer">Precio a consultar</Label>
         </div>
       </div>
 
-      {/* DESCRIPCIÓN */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <Label className="font-bold text-[10px] uppercase tracking-widest">Moneda</Label>
+          <Select value={currency} onValueChange={(v: any) => setCurrency(v)} disabled={isConsulting}>
+            <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="ARS">Peso Argentino ($)</SelectItem>
+              <SelectItem value="USD">Dólar (U$S)</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="md:col-span-2">
+          <Label className="font-bold text-[10px] uppercase tracking-widest">Monto</Label>
+          <Input 
+            type="number" 
+            value={isConsulting ? "" : price} 
+            onChange={(e) => setPrice(e.target.value)} 
+            required={!isConsulting}
+            disabled={isConsulting}
+            placeholder={isConsulting ? "PRECIO A CONSULTAR" : "0.00"}
+            className="mt-1 font-mono font-bold" 
+          />
+        </div>
+      </div>
+    </div>
+
+    {/* UBICACIÓN TEXTO */}
+    <div className="md:col-span-2">
+      <Label className="font-bold text-[10px] uppercase tracking-widest">Ubicación (Dirección/Barrio)</Label>
+      <Input 
+        value={location} 
+        onChange={(e) => setLocation(e.target.value)} 
+        required 
+        placeholder="Ej: Campana, Bº Dalmine" 
+        className="mt-1"
+      />
+    </div>
+
+    {/* SECCIÓN GEOLOCALIZACIÓN */}
+    <div className="md:col-span-2 p-5 bg-brand-magenta/5 border border-brand-magenta/20 space-y-4 rounded-lg">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2 text-brand-magenta">
+          <MapPin className="h-4 w-4" />
+          <span className="text-[10px] font-bold uppercase tracking-widest">Geolocalización Maps</span>
+        </div>
+        {lat && <span className="text-[9px] bg-green-600 text-white px-2 py-0.5 font-bold">✓ COORDENADAS VÁLIDAS</span>}
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="md:col-span-3">
+          <Input 
+            value={rawCoords}
+            onChange={(e) => handleCoordsChange(e.target.value)}
+            placeholder="Pegar coordenadas aquí (ej: -34.16, -58.95)"
+            className="bg-white border-brand-magenta/30"
+          />
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          className="text-[10px] rounded-lg font-bold uppercase h-10 border-brand-magenta/30 text-brand-magenta hover:bg-brand-magenta hover:text-white"
+          disabled={!lat}
+          onClick={() => window.open(`https://www.google.com/maps?q=${lat},${lng}`, '_blank')}
+        >
+          <ExternalLink className="h-3 w-3 mr-2" /> Verificar
+        </Button>
+      </div>
+    </div>
+
+    {/* AMBIENTES Y M2 */}
+    <div className="grid grid-cols-3 gap-4 md:col-span-2">
       <div>
-        <Label className="font-bold">Descripción Detallada</Label>
-        <Textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} />
+        <Label className="font-bold text-[10px] uppercase tracking-widest">Ambientes</Label>
+        <Input type="number" value={rooms} onChange={(e) => setRooms(e.target.value)} className="none mt-1" />
       </div>
+      <div>
+        <Label className="font-bold text-[10px] uppercase tracking-widest">Baños</Label>
+        <Input type="number" value={bathrooms} onChange={(e) => setBathrooms(e.target.value)} className="mt-1" />
+      </div>
+      <div>
+        <Label className="font-bold text-[10px] uppercase tracking-widest">m² Totales</Label>
+        <Input type="number" value={sqft} onChange={(e) => setSqft(e.target.value)} className="mt-1" />
+      </div>
+    </div>
+  </div>
 
-      {/* GALERÍA */}
-      <div className="space-y-4">
-        <Label className="text-lg font-bold">Imágenes de la Propiedad</Label>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {imageUrls.map((url, i) => (
-            <div key={i} className="relative aspect-square border rounded-lg overflow-hidden group">
-              <img src={url} className="w-full h-full object-cover" alt="" />
-              {i === 0 && <div className="absolute top-0 left-0 bg-brand-magenta text-white text-[9px] px-2 py-1 font-bold">PORTADA</div>}
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                <Button size="icon" variant="secondary" className="h-8 w-8" onClick={() => moveImage(i, 'up')} disabled={i===0}><ArrowLeft className="h-4 w-4" /></Button>
-                <Button size="icon" variant="destructive" className="h-8 w-8" onClick={() => setImageUrls(imageUrls.filter((_, idx) => idx !== i))}><X className="h-4 w-4" /></Button>
-                <Button size="icon" variant="secondary" className="h-8 w-8" onClick={() => moveImage(i, 'down')} disabled={i===imageUrls.length-1}><ArrowRight className="h-4 w-4" /></Button>
-              </div>
-            </div>
-          ))}
-          <label className="border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-brand-gray/5 min-h-[120px]">
-            {isUploading ? <Loader2 className="animate-spin text-brand-magenta" /> : <><Upload className="text-brand-magenta mb-2" /><span className="text-[10px] font-bold uppercase">Subir Fotos</span></>}
-            <input type="file" multiple accept="image/*" className="hidden" onChange={handleFileUpload} disabled={isUploading} />
-          </label>
-        </div>
-      </div>
+  {/* DESCRIPCIÓN */}
+  <div>
+    <Label className="font-bold text-[10px] uppercase tracking-widest">Descripción del Inmueble</Label>
+    <Textarea 
+      value={description} 
+      onChange={(e) => setDescription(e.target.value)} 
+      rows={5} 
+      className="mt-1 resize-none" 
+    />
+  </div>
 
-      {/* FOOTER */}
-      <div className="flex items-center justify-between pt-6 border-t">
-        <div className="flex items-center gap-2">
-          <Switch checked={featured} onCheckedChange={setFeatured} id="feat" />
-          <Label htmlFor="feat" className="font-bold text-brand-magenta">Destacar en Inicio</Label>
+  {/* GALERÍA */}
+  <div className="space-y-4">
+    <div className="flex items-center justify-between">
+      <Label className="text-sm font-bold uppercase tracking-widest">Galería de Imágenes</Label>
+      <span className="text-[10px] text-muted-foreground font-bold">{imageUrls.length} FOTOS CARGADAS</span>
+    </div>
+    <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+      {imageUrls.map((url, i) => (
+        <div key={url} className="relative aspect-square border border-brand-light-gray overflow-hidden group">
+          <img src={url} className="w-full h-full object-cover" alt="" />
+          {i === 0 && <div className="absolute top-0 left-0 bg-brand-magenta text-white text-[8px] px-2 py-1 font-bold tracking-tighter">PRINCIPAL</div>}
+          <div className="absolute inset-0 bg-brand-dark/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+            <Button size="icon" variant="secondary" className="h-7 w-7" onClick={() => moveImage(i, 'up')} disabled={i===0}><ArrowLeft className="h-3 w-3" /></Button>
+            <Button size="icon" variant="destructive" className="h-7 w-7" onClick={() => setImageUrls(imageUrls.filter((_, idx) => idx !== i))}><X className="h-3 w-3" /></Button>
+            <Button size="icon" variant="secondary" className="h-7 w-7" onClick={() => moveImage(i, 'down')} disabled={i===imageUrls.length-1}><ArrowRight className="h-3 w-3" /></Button>
+          </div>
         </div>
-        <div className="flex gap-3">
-          <Button type="button" variant="outline" onClick={onCancel}>Cancelar</Button>
-          <Button type="submit" disabled={loading || isUploading} className="bg-brand-magenta text-white px-10">
-            {loading ? 'Guardando...' : property ? 'Actualizar' : 'Publicar'}
-          </Button>
-        </div>
-      </div>
-    </form>
+      ))}
+      <label className="border-2 border-dashed border-brand-light-gray flex flex-col items-center justify-center cursor-pointer hover:bg-brand-gray/5 min-h-[100px] transition-colors">
+        {isUploading ? <Loader2 className="animate-spin text-brand-magenta" /> : <><Upload className="h-5 w-5 text-brand-magenta mb-1" /><span className="text-[8px] font-bold uppercase">Añadir</span></>}
+        <input type="file" multiple accept="image/*" className="hidden" onChange={handleFileUpload} disabled={isUploading} />
+      </label>
+    </div>
+  </div>
+
+  {/* FOOTER */}
+  <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-brand-light-gray gap-4">
+    <div className="flex items-center gap-3 bg-brand-magenta/5 px-4 py-2 border border-brand-magenta/10 rounded-lg">
+      <Switch checked={featured} onCheckedChange={setFeatured} id="feat" />
+      <Label htmlFor="feat" className="font-bold text-[10px] uppercase tracking-widest text-brand-magenta cursor-pointer">Destacar Propiedad</Label>
+    </div>
+    <div className="flex gap-3 w-full md:w-auto">
+      <Button type="button" variant="outline" onClick={onCancel} className="flex-1 md:flex-none text-[10px] rounded-lg font-bold uppercase tracking-widest">Descartar</Button>
+      <Button type="submit" disabled={loading || isUploading} className="flex-1 md:flex-none bg-brand-magenta rounded-lg text-white px-12 text-[10px] font-bold uppercase tracking-widest hover:bg-brand-dark transition-colors">
+        {loading ? 'Procesando...' : property ? 'Guardar Cambios' : 'Publicar Inmueble'}
+      </Button>
+    </div>
+  </div>
+</form>
   );
 }

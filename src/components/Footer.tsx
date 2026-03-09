@@ -42,7 +42,7 @@ export function Footer() {
               <div className="p-2 bg-white/5 group-hover:bg-brand-magenta/10 transition-colors">
                 <Mail className="h-4 w-4 text-brand-magenta" />
               </div>
-              <span className="font-body text-sm">contacto@silvinasalvatori.com</span>
+              <span className="font-body text-sm">inmobiliariasalvarori@gmail.com</span>
             </div>
           </div>
 
