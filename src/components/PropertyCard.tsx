@@ -4,6 +4,11 @@ import { Badge } from '@/components/ui/badge';
 import type { Property } from '@/types/property';
 
 function formatPrice(price: number, type: string, currency: string = 'ARS') {
+  // 1. Validamos si el precio es 0 o no existe
+  if (!price || price === 0) {
+    return "CONSULTAR";
+  }
+
   // Configuramos el formato según la moneda
   const formatter = new Intl.NumberFormat(currency === 'USD' ? 'en-US' : 'es-AR', {
     style: 'currency',
@@ -20,7 +25,6 @@ function formatPrice(price: number, type: string, currency: string = 'ARS') {
 
   return type === 'rent' ? `${priceString}/mes` : priceString;
 }
-
 export function PropertyCard({ property }: { property: Property }) {
   const imageUrl = property.image_urls?.[0] || '/placeholder.svg';
 
