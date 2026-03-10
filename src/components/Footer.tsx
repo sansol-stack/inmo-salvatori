@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="bg-brand-dark text-white pt-16 pb-8 border-t-4 border-brand-magenta">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-          
+
           {/* Columna 1: Branding */}
           <div className="flex flex-col items-start">
             <div className="mb-4">
@@ -26,26 +26,45 @@ export function Footer() {
             <h4 className="font-display text-lg font-bold uppercase tracking-widest text-white mb-6">
               Contacto
             </h4>
-            <div className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group">
-              <div className="p-2 bg-white/5 group-hover:bg-brand-magenta/10 transition-colors">
-                <MapPin className="h-4 w-4 text-brand-magenta" />
-              </div>
-              <span className="font-body text-sm">Campana, Buenos Aires, Argentina</span>
-            </div>
-            <div className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group">
-              <div className="p-2 bg-white/5 group-hover:bg-brand-magenta/10 transition-colors">
-                <Phone className="h-4 w-4 text-brand-magenta" />
-              </div>
-              <span className="font-body text-sm">+54 9 03489 49-7532</span>
-            </div>
-            <div className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group">
-              <div className="p-2 bg-white/5 group-hover:bg-brand-magenta/10 transition-colors">
-                <Mail className="h-4 w-4 text-brand-magenta" />
-              </div>
-              <span className="font-body text-sm">inmobiliariasalvarori@gmail.com</span>
+            <div className="space-y-4">
+              {/* Ubicación con Google Maps */}
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Bertolini+385+B+Campana+Buenos+Aires"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group"
+              >
+                <div className="p-2 bg-white/5 rounded-none group-hover:bg-brand-magenta transition-all">
+                  <MapPin className="h-4 w-4 text-white" />
+                </div>
+                <span className="font-body text-sm">Bertolini 385 "B", Campana</span>
+              </a>
+
+              {/* Teléfono con WhatsApp */}
+              <a
+                href="https://wa.me/5493489497532"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group"
+              >
+                <div className="p-2 bg-white/5 rounded-none group-hover:bg-brand-magenta transition-all">
+                  <Phone className="h-4 w-4 text-white" />
+                </div>
+                <span className="font-body text-sm">+54 9 3489 49-7532</span>
+              </a>
+
+              {/* Email con Mailto */}
+              <a
+                href="mailto:silvinasalvatori.inmo@gmail.com"
+                className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group"
+              >
+                <div className="p-2 bg-white/5 rounded-none group-hover:bg-brand-magenta transition-all">
+                  <Mail className="h-4 w-4 text-white" />
+                </div>
+                <span className="font-body text-sm lowercase">silvinasalvatori.inmo@gmail.com</span>
+              </a>
             </div>
           </div>
-
           {/* Columna 3: Redes Sociales */}
           <div>
             <h4 className="font-display text-lg font-bold uppercase tracking-widest text-white mb-6">

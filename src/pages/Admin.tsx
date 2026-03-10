@@ -85,7 +85,7 @@ export default function Admin() {
       <Navbar />
 
       <main className="pt-20 container mx-auto px-0 pb-12">
-        <header className="bg-white border-b sticky top-0 z-30">
+        <header className="bg-background sticky top-0 z-30">
           <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 py-4">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center px-4 gap-4">
               <div>
