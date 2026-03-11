@@ -39,15 +39,30 @@ export function PropertyCard({ property }: { property: Property }) {
           alt={property.title}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
         />
-        
-        {/* PRECIO ESTILO FLECHA ROSA (Inspirado en la imagen) */}
         <div className="absolute top-6 left-0 z-10">
-          <div className="bg-brand-magenta text-white font-display font-bold py-0.5 px-4 shadow-lg flex items-center
-                          after:content-[''] after:absolute after:left-full after:top-0 
-                          after:border-y-[16px] after:border-y-transparent 
-                          after:border-l-[12px] after:border-l-brand-magenta">
-            <span className="text-xl tracking-tight">
-              {formatPrice(property.price, property.type, property.currency)}
+          {/* badge / ribbon at top-left showing price or status */}
+        <div className={`text-white font-display font-bold py-0.5 px-4 shadow-lg flex items-center relative
+      ${property.status === 'available' ? 'bg-brand-magenta' :
+        property.status === 'reserved' ? 'bg-yellow-600' :
+        property.status === 'rented' ? 'bg-brand-dark' :
+        property.status === 'sold' ? 'bg-brand-dark' :
+        'bg-brand-dark'}
+      after:content-[''] after:absolute after:left-full after:top-0 
+      after:border-y-[16px] after:border-y-transparent 
+      after:border-l-[12px] ${property.status === 'available' ? 'after:border-l-brand-magenta' :
+        property.status === 'reserved' ? 'after:border-l-yellow-600' :
+        'after:border-l-brand-dark'}`}>
+
+            <span className="text-lg tracking-tight uppercase">
+              {property.status === 'available'
+                ? formatPrice(property.price, property.type, property.currency)
+                : property.status === 'reserved'
+                  ? 'RESERVADA'
+                  : property.status === 'rented'
+                    ? 'ALQUILADA'
+                    : property.status === 'sold'
+                      ? 'VENDIDA'
+                      : ''}
             </span>
           </div>
         </div>
@@ -69,7 +84,7 @@ export function PropertyCard({ property }: { property: Property }) {
         <h3 className="font-display text-xl font-bold text-brand-dark mb-1 uppercase tracking-tight line-clamp-1 group-hover:text-brand-magenta transition-colors">
           {property.title}
         </h3>
-        
+
         <p className="flex items-center gap-1 text-muted-foreground text-sm mb-4 font-body italic">
           <MapPin className="h-3.5 w-3.5 text-brand-magenta" />
           {property.location}
@@ -77,15 +92,15 @@ export function PropertyCard({ property }: { property: Property }) {
 
         <div className="grid grid-cols-3 gap-2 text-[12px] text-brand-dark font-bold font-body border-t border-brand-light-gray pt-4">
           <span className="flex flex-col items-center gap-1">
-            <BedDouble className="h-4 w-4 text-brand-magenta" /> 
+            <BedDouble className="h-4 w-4 text-brand-magenta" />
             <span>{property.rooms} DORM.</span>
           </span>
           <span className="flex flex-col items-center gap-1 border-x border-brand-light-gray">
-            <Bath className="h-4 w-4 text-brand-magenta" /> 
+            <Bath className="h-4 w-4 text-brand-magenta" />
             <span>{property.bathrooms} BAÑO</span>
           </span>
           <span className="flex flex-col items-center gap-1">
-            <Maximize className="h-4 w-4 text-brand-magenta" /> 
+            <Maximize className="h-4 w-4 text-brand-magenta" />
             <span>{property.sqft} m²</span>
           </span>
         </div>

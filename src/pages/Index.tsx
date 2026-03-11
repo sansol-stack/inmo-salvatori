@@ -17,13 +17,19 @@ const Index = () => {
   const [typeFilter, setTypeFilter] = useState<string>("all");
 
   // Lógica de filtrado
-  const filteredProperties = properties?.filter((p) => {
-    const matchesSearch = 
-      p.location.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      p.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesType = typeFilter === "all" || p.type === typeFilter;
-    return matchesSearch && matchesType;
-  });
+  const filteredProperties = properties?.filter(p => {
+  if (p.status === 'available' || p.status === 'reserved') return true;
+  
+  // Si está vendida, comprobamos si pasaron más de 30 días
+  if (p.status === 'sold' && p.sold_at) {
+    const soldDate = new Date(p.sold_at);
+    const today = new Date();
+    const diffDays = Math.ceil((today.getTime() - soldDate.getTime()) / (1000 * 60 * 60 * 24));
+    return diffDays <= 30; // Solo mostrar si pasaron 30 días o menos
+  }
+  
+  return true;
+});
 
   return (
     <div className="min-h-screen bg-background font-body">

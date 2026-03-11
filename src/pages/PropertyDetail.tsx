@@ -265,10 +265,20 @@ export default function PropertyDetail() {
                 </p>
 
                 <div className="space-y-4 relative z-10">
-                  <Button asChild className="w-full bg-brand-magenta hover:bg-white hover:text-brand-dark transition-all h-14 rounded-none border-none">
-                    <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3">
+                  <Button
+                    disabled={property.status !== 'available'}
+                    asChild className={`${property.status === 'available' ? 'w-full bg-brand-magenta hover:bg-white hover:text-brand-dark transition-all h-14 rounded-none border-none' : 'w-full bg-gray-400'}`}
+                  >
+                    <a
+                      href={property.status === 'available' ? whatsappUrl : undefined}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-3"
+                    >
                       <MessageCircle className="h-5 w-5" />
-                      Consulta por WhatsApp
+                      {property.status === 'available'
+                        ? 'Consultar por WhatsApp'
+                        : 'Propiedad no disponible'}
                     </a>
                   </Button>
 

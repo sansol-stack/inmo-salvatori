@@ -5,7 +5,7 @@ export function Footer() {
     <footer className="bg-brand-dark text-white pt-16 pb-8 border-t-4 border-brand-magenta">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
-          
+
           {/* Columna 1: Branding */}
           <div className="flex flex-col items-start">
             <div className="mb-4">
@@ -22,52 +22,52 @@ export function Footer() {
           </div>
 
           {/* Columna 2: Contacto Directo */}
-<div className="space-y-4">
-  <h4 className="font-display text-lg font-bold uppercase tracking-widest text-white mb-6 text-center md:text-left">
-    Contacto
-  </h4>
-  <div className="space-y-4">
-    {/* OPCIÓN MÁS FIABLE PARA GOOGLE MAPS */}
-    <a 
-      href="https://www.google.com/maps/search/?api=1&query=Silvina+Salvatori+Inmobiliaria+Campana" 
-      target="_blank" 
-      rel="noopener noreferrer"
-      className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group"
-    >
-      <div className="p-2 bg-white/5 rounded-lg group-hover:bg-brand-magenta transition-all shrink-0">
-        <MapPin className="h-4 w-4 text-white" />
-      </div>
-      <div className="flex flex-col">
-        <span className="font-body text-sm leading-tight">Bertolini 385 "B"</span>
-        <span className="font-body text-[10px] uppercase tracking-widest opacity-60">Campana, Buenos Aires</span>
-      </div>
-    </a>
+          <div className="space-y-4">
+            <h4 className="font-display text-lg font-bold uppercase tracking-widest text-white mb-6 text-center md:text-left">
+              Contacto
+            </h4>
+            <div className="space-y-4">
+              {/* OPCIÓN MÁS FIABLE PARA GOOGLE MAPS */}
+              <a
+                href="https://www.google.com/maps/search/?api=1&query=Silvina+Salvatori+Inmobiliaria+Campana"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group"
+              >
+                <div className="p-2 bg-white/5 rounded-lg group-hover:bg-brand-magenta transition-all shrink-0">
+                  <MapPin className="h-4 w-4 text-white" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-body text-sm leading-tight">Bertolini 385 "B"</span>
+                  <span className="font-body text-[10px] uppercase tracking-widest opacity-60">Campana, Buenos Aires</span>
+                </div>
+              </a>
 
-    {/* WhatsApp con mensaje personalizado */}
-    <a 
-      href={`https://wa.me/5493489497532?text=${encodeURIComponent('Hola Silvina, estuve viendo tu sitio web y quería realizar una consulta.')}`}
-      target="_blank" 
-      rel="noopener noreferrer"
-      className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group"
-    >
-      <div className="p-2 bg-white/5 rounded-lg group-hover:bg-brand-magenta transition-all shrink-0">
-        <Phone className="h-4 w-4 text-white" />
-      </div>
-      <span className="font-body text-sm">+54 9 3489 49-7532</span>
-    </a>
+              {/* WhatsApp con mensaje personalizado */}
+              <a
+                href={`https://wa.me/5493489497532?text=${encodeURIComponent('Hola Silvina, estuve viendo tu sitio web y quería realizar una consulta.')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group"
+              >
+                <div className="p-2 bg-white/5 rounded-lg group-hover:bg-brand-magenta transition-all shrink-0">
+                  <Phone className="h-4 w-4 text-white" />
+                </div>
+                <span className="font-body text-sm">+54 9 3489 49-7532</span>
+              </a>
 
-    {/* Email con asunto predefinido */}
-    <a 
-      href="mailto:silvinasalvatori.inmo@gmail.com?subject=Consulta%20desde%20Sitio%20Web" 
-      className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group"
-    >
-      <div className="p-2 bg-white/5 rounded-lg group-hover:bg-brand-magenta transition-all shrink-0">
-        <Mail className="h-4 w-4 text-white" />
-      </div>
-      <span className="font-body text-sm lowercase">silvinasalvatori.inmo@gmail.com</span>
-    </a>
-  </div>
-</div>
+              {/* Email con asunto predefinido */}
+              <a
+                href="mailto:inmobiliariasalvarori@gmail.com?subject=Consulta%20desde%20Sitio%20Web"
+                className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group"
+              >
+                <div className="p-2 bg-white/5 rounded-lg group-hover:bg-brand-magenta transition-all shrink-0">
+                  <Mail className="h-4 w-4 text-white" />
+                </div>
+                <span className="font-body text-sm lowercase">inmobiliariasalvarori@gmail.com</span>
+              </a>
+            </div>
+          </div>
           {/* Columna 3: Redes Sociales */}
           <div>
             <h4 className="font-display text-lg font-bold uppercase tracking-widest text-white mb-6">
@@ -89,9 +89,12 @@ export function Footer() {
           <p className="text-white/30 font-body text-[10px] uppercase tracking-widest text-center md:text-left">
             © {new Date().getFullYear()} Silvina Salvatori. Todos los derechos reservados.
           </p>
-          <p className="text-white/30 font-body text-[10px] uppercase tracking-widest">
-            Diseño por <span className="text-white/60 font-bold hover:text-brand-magenta cursor-pointer">Sansol Stack</span>
-          </p>
+          <a href={`https://wa.me/5492216760935?text=${encodeURIComponent('Hola Lucas! Te contacto por SanSol Stack.')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white/30 font-body text-[10px] uppercase tracking-widest">
+            Desarrollado por <span className="text-white/60 font-bold hover:text-brand-magenta cursor-pointer">Sansol Stack</span>
+          </a>
         </div>
       </div>
     </footer>

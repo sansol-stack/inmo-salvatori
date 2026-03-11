@@ -4,6 +4,7 @@ export interface Property {
   description: string | null;
   price: number;
   currency: 'ARS' | 'USD';
+  status?: 'available' | 'sold' | 'rented' | 'reserved';
   location: string;
   lat?: number | null; // Añade esta línea
   lng?: number | null; // Añade esta línea
@@ -14,6 +15,8 @@ export interface Property {
   featured: boolean;
   image_urls: string[];
   created_at?: string;
+  is_visible?: boolean; // Añade esta línea
+  sold_at?: string | null; // Añade esta línea
 }
 
 export interface PropertyFilters {
