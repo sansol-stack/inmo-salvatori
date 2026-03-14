@@ -105,7 +105,7 @@ export default function PropertyDetail() {
         } />
         <meta property="og:title" content={`${property.title} | Silvina Salvatori`} />
         <meta property="og:description" content={property.description?.slice(0, 160)} />
-        <meta property="og:image" content={property.image_urls?.[0] || 'https://silvinasalvatori.netlify.app/og-image.png'} />
+        <meta property="og:image" content={property.image_urls?.[0] || 'https://inmosilvinasalvatori.vercel.app/og-image.png'} />
         <meta property="og:url" content={window.location.href} />
         <meta property="og:type" content="website" />
       </Helmet>
