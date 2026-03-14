@@ -58,13 +58,13 @@ export function Footer() {
 
               {/* Email con asunto predefinido */}
               <a
-                href="mailto:inmobiliariasalvarori@gmail.com?subject=Consulta%20desde%20Sitio%20Web"
+                href="mailto:inmobiliariasalvatori@gmail.com?subject=Consulta%20desde%20Sitio%20Web"
                 className="flex items-center gap-3 text-white/70 hover:text-brand-magenta transition-colors group"
               >
                 <div className="p-2 bg-white/5 rounded-lg group-hover:bg-brand-magenta transition-all shrink-0">
                   <Mail className="h-4 w-4 text-white" />
                 </div>
-                <span className="font-body text-sm lowercase">inmobiliariasalvarori@gmail.com</span>
+                <span className="font-body text-sm lowercase">inmobiliariasalvatori@gmail.com</span>
               </a>
             </div>
           </div>

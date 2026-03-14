@@ -11,30 +11,43 @@ import { Footer } from "@/components/Footer";
 const Index = () => {
   const { data: properties, isLoading } = useProperties();
   const [viewMode, setViewMode] = useState<'list' | 'map'>('list');
-  
+
   // Estados para los filtros
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
 
-  // Lógica de filtrado
-  const filteredProperties = properties?.filter(p => {
-  if (p.status === 'available' || p.status === 'reserved') return true;
-  
-  // Si está vendida, comprobamos si pasaron más de 30 días
-  if (p.status === 'sold' && p.sold_at) {
-    const soldDate = new Date(p.sold_at);
-    const today = new Date();
-    const diffDays = Math.ceil((today.getTime() - soldDate.getTime()) / (1000 * 60 * 60 * 24));
-    return diffDays <= 30; // Solo mostrar si pasaron 30 días o menos
+  //filtra por status, búsqueda y tipo de operación
+const filteredProperties = properties?.filter(p => {
+
+  // 1. Filtro de status (lógica original intacta)
+  const isVisible =
+    p.status === 'available' ||
+    p.status === 'reserved' ||
+    (p.status === 'sold' && p.sold_at &&
+      Math.ceil((new Date().getTime() - new Date(p.sold_at).getTime())
+        / (1000 * 60 * 60 * 24)) <= 30);
+
+  if (!isVisible) return false;
+
+  // 2. Filtro por tipo de operación (Venta / Alquiler)
+  if (typeFilter !== 'all' && p.type !== typeFilter) return false;
+
+  // 3. Filtro por búsqueda de texto
+  if (searchQuery) {
+    const q = searchQuery.toLowerCase();
+    const matchesTitle    = p.title?.toLowerCase().includes(q);
+    const matchesLocation = p.location?.toLowerCase().includes(q);
+    const matchesDesc     = p.description?.toLowerCase().includes(q);
+    if (!matchesTitle && !matchesLocation && !matchesDesc) return false;
   }
-  
+
   return true;
 });
 
   return (
     <div className="min-h-screen bg-background font-body">
       <Navbar />
-      
+
       {/* RESTAURAMOS TU HERO SECTION ORIGINAL */}
       <HeroSection onSearch={(query) => setSearchQuery(query)} />
 
@@ -45,7 +58,7 @@ const Index = () => {
             {filteredProperties?.length || 0} propiedades encontradas
           </p>
           {/* Selector de Venta/Alquiler */}
-          <select 
+          <select
             className="border rounded-full px-4 h-9 bg-white text-sm font-bold text-brand-magenta border-brand-magenta/20 focus:outline-none focus:ring-2 focus:ring-brand-magenta"
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
@@ -57,15 +70,15 @@ const Index = () => {
         </div>
 
         <div className="flex bg-white border rounded-lg overflow-hidden shadow-sm">
-          <Button 
-            variant={viewMode === 'list' ? 'default' : 'ghost'} 
+          <Button
+            variant={viewMode === 'list' ? 'default' : 'ghost'}
             className={`rounded-none h-10 px-6 ${viewMode === 'list' ? 'bg-brand-magenta hover:bg-brand-magenta/90' : 'text-muted-foreground'}`}
             onClick={() => setViewMode('list')}
           >
             <ListIcon className="h-4 w-4 mr-2" /> Lista
           </Button>
-          <Button 
-            variant={viewMode === 'map' ? 'default' : 'ghost'} 
+          <Button
+            variant={viewMode === 'map' ? 'default' : 'ghost'}
             className={`rounded-none h-10 px-6 ${viewMode === 'map' ? 'bg-brand-magenta hover:bg-brand-magenta/90' : 'text-muted-foreground'}`}
             onClick={() => setViewMode('map')}
           >
@@ -89,11 +102,11 @@ const Index = () => {
           </div>
         ) : (
           <div className="h-[600px] rounded-2xl overflow-hidden border shadow-2xl animate-fade-in bg-slate-100">
-             <PropertyMap properties={filteredProperties || []} />
+            <PropertyMap properties={filteredProperties || []} />
           </div>
         )}
       </main>
-        <Footer />
+      <Footer />
     </div>
   );
 };
