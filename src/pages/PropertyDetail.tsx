@@ -14,8 +14,9 @@ import {
 } from "@/components/ui/dialog";
 import {
   ArrowLeft, MapPin, BedDouble, Bath, Maximize, Phone,
-  MessageCircle, X, ChevronLeft, ChevronRight, ZoomIn
+  MessageCircle, X, ChevronLeft, ChevronRight, ZoomIn, Share2
 } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 function formatPrice(price: number, type: string, currency: string = 'ARS') {
   // SI EL PRECIO ES 0 O MENOR, DEVOLVEMOS "CONSULTAR"
@@ -80,8 +81,34 @@ export default function PropertyDetail() {
     `Hola Silvina, me interesa la propiedad "${property.title}" que vi en tu web.\n\nLink a la propiedad: ${currentUrl}`
   )}`;
 
+  const handleShare = async () => {
+    const shareData = {
+      title: property.title,
+      text: `${property.type === 'sale' ? 'En venta' : 'En alquiler'}: ${property.title} en ${property.location} — ${formatPrice(property.price, property.type, property.currency)}`,
+      url: currentUrl,
+    };
+
+    if (navigator.share) {
+      await navigator.share(shareData);
+    } else {
+      await navigator.clipboard.writeText(currentUrl);
+      alert('¡Link copiado al portapapeles!');
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-white">
+      <Helmet>
+        <title>{property.title} | Silvina Salvatori</title>
+        <meta name="description" content={
+          `${property.type === 'sale' ? 'En venta' : 'En alquiler'}: ${property.title} en ${property.location}. ${property.rooms} dorm. · ${property.bathrooms} baños · ${property.sqft}m². ${formatPrice(property.price, property.type, property.currency)}`
+        } />
+        <meta property="og:title" content={`${property.title} | Silvina Salvatori`} />
+        <meta property="og:description" content={property.description?.slice(0, 160)} />
+        <meta property="og:image" content={property.image_urls?.[0] || 'https://silvinasalvatori.netlify.app/og-image.png'} />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="website" />
+      </Helmet>
       <Navbar />
 
       <main className="pt-20 flex-1">
@@ -282,9 +309,18 @@ export default function PropertyDetail() {
                     </a>
                   </Button>
 
-                  <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10 h-14 rounded-none">
+                  {/* <Button variant="outline" className="w-full border-white/20 text-white hover:bg-white/10 h-14 rounded-none">
                     <Phone className="h-4 w-4 mr-2" />
                     Llamar ahora
+                  </Button> */}
+
+                  <Button
+                    variant="outline"
+                    onClick={handleShare}
+                    className="w-full border-white/20 text-white hover:bg-white/10 h-14 rounded-none"
+                  >
+                    <Share2 className="h-4 w-4 mr-2" />
+                    Compartir propiedad
                   </Button>
                 </div>
 
