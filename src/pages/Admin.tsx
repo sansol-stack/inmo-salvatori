@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Pencil, Trash2, LogOut } from 'lucide-react';
+import { Plus, Pencil, Trash2, LogOut, MapPin, Eye, EyeOff, CheckCircle2, Clock } from 'lucide-react';
 import { Navbar } from '@/components/Navbar';
 import { AdminPropertyForm } from '@/components/AdminPropertyForm';
 import { useAuth } from '@/hooks/useAuth';
@@ -15,7 +15,7 @@ import type { Property } from '@/types/property';
 
 export default function Admin() {
   const { user, loading: authLoading, signOut } = useAuth();
-  const { data: properties, isLoading } = useProperties();
+  const { data: properties, isLoading } = useProperties({ isAdmin: true });
   const createMutation = useCreateProperty();
   const updateMutation = useUpdateProperty();
   const deleteMutation = useDeleteProperty();
@@ -131,50 +131,75 @@ export default function Admin() {
           </Card>
         )}
 
-        <Card className="card-shadow mx-4">
-          <CardContent className="p-0 sm:p-6"> {/* Menos padding en móvil */}
-            <div className="overflow-x-auto"> {/* Contenedor para scroll horizontal */}
+        <Card className="card-shadow mx-4 border-none shadow-2xl">
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
               <Table>
-                <TableHeader>
-                  <TableRow className="bg-brand-gray/5">
-                    <TableHead className="font-bold uppercase text-[10px] tracking-widest min-w-[200px]">Propiedad</TableHead>
-                    <TableHead className="font-bold uppercase text-[10px] tracking-widest hidden md:table-cell">Tipo</TableHead>
+                <TableHeader className="md:table-header-group">
+                  <TableRow className="bg-brand-gray/5 border-b">
+                    <TableHead className="font-bold uppercase text-[10px] tracking-widest p-2">Propiedad</TableHead>
+                    <TableHead className="font-bold uppercase text-[10px] tracking-widest p-2">Ubicación</TableHead>
+                    <TableHead className="font-bold uppercase text-[10px] tracking-widest text-center">Estado</TableHead>
+                    <TableHead className="font-bold uppercase text-[10px] tracking-widest text-center">Tipo</TableHead>
                     <TableHead className="font-bold uppercase text-[10px] tracking-widest">Precio</TableHead>
-                    <TableHead className="text-right font-bold uppercase text-[10px] tracking-widest">Acciones</TableHead>
+                    <TableHead className="font-bold uppercase text-[10px] tracking-widest text-center px-0">Visibilidad</TableHead>
+                    <TableHead className="font-bold uppercase text-[10px] tracking-wides w-px text-center whitespace-nowrap">Acciones</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {isLoading ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8 font-body text-muted-foreground">
+                      <TableCell colSpan={7} className="text-center py-8 font-body text-muted-foreground">
                         Cargando propiedades...
                       </TableCell>
                     </TableRow>
                   ) : properties?.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="text-center py-8 font-body text-muted-foreground">
+                      <TableCell colSpan={7} className="text-center py-8 font-body text-muted-foreground">
                         No hay propiedades. Crea la primera.
                       </TableCell>
                     </TableRow>
                   ) : (
                     properties?.map((p) => (
                       <TableRow key={p.id}>
-                        <TableCell className="font-body font-medium">{p.title}</TableCell>
-                        <TableCell className="font-body">{p.location}</TableCell>
+                        {/* COLUMNA: TÍTULO */}
+                        <TableCell className="font-body font-medium"><span className="font-display font-bold text-brand-dark text-base md:text-sm">{p.title}</span></TableCell>
 
-                        {/* CORRECCIÓN AQUÍ: Pasamos el precio, el tipo y la moneda de la base de datos */}
-                        <TableCell className="font-body">
-                          {formatPrice(p.price, p.type, p.currency)}
+                        {/* COLUMNA: UBICACIÓN */}
+                        <TableCell className="font-body"><span className="text-sm flex items-center gap-1 mt-1">
+                          <MapPin className="h-3 w-3" /> {p.location}
+                        </span></TableCell>
+
+                        {/* COLUMNA: STATUS (Disponible/Reservada/Vendida) */}
+                        <TableCell className="px-4 py-2 md:p-4 text-left md:text-center">
+                          <div className="inline-flex items-center">
+                            {p.status === 'available' && <Badge className="bg-green-100 text-green-700 hover:bg-green-100 border-none rounded-lg font-bold text-[10px] uppercase tracking-tighter"><CheckCircle2 className="h-3 w-3 mr-1" /> Disponible</Badge>}
+                            {p.status === 'reserved' && <Badge className="bg-yellow-100 text-yellow-700 hover:bg-yellow-100 border-none rounded-lg font-bold text-[10px] uppercase tracking-tighter"><Clock className="h-3 w-3 mr-1" /> Reservada</Badge>}
+                            {p.status === 'sold' && <Badge className="bg-brand-dark text-white hover:bg-brand-dark border-none rounded-lg font-bold text-[10px] uppercase tracking-tighter">{p.type === 'rent' ? 'Alquilada' : 'Vendida'}</Badge>}
+                          </div>
                         </TableCell>
 
-                        <TableCell>
+                        {/* COLUMNA: TIPO (Venta/Alquiler) */}
+                        <TableCell className="px-4 py-2 md:p-4 text-center">
                           <Badge variant="secondary" className="font-body">
                             {p.type === 'sale' ? 'Venta' : 'Alquiler'}
                           </Badge>
                         </TableCell>
-                        <TableCell className="font-body">{p.featured ? 'Sí' : 'No'}</TableCell>
-                        <TableCell className="text-right">
-                          {/* ... (botones de editar y borrar igual) ... */}
+
+                        {/* COLUMNA: PRECIO */}
+                        <TableCell className="px-4 py-2 md:p-4 font-display font-bold text-brand-magenta">
+                          {formatPrice(p.price, p.type, p.currency)}
+                        </TableCell>
+
+                        {/* COLUMNA: VISIBILIDAD (Ojo abierto/cerrado) */}
+                        <TableCell className="px-2 py-2 md:p-4 text-center">
+                          <div className={`inline-flex items-center gap-1.5 font-bold text-[10px] uppercase tracking-widest ${p.is_visible ? 'text-blue-600' : 'text-muted-foreground opacity-50'}`}>
+                            {p.is_visible ? <><Eye className="h-4 w-4" /></> : <><EyeOff className="h-4 w-4" /></>}
+                          </div>
+                        </TableCell>
+
+                        {/* COLUMNA: ACCIONES */}
+                        <TableCell className="px-4 py-2  text-left md:text-center">
                           <div className="flex justify-end gap-2">
                             <Button
                               variant="outline"

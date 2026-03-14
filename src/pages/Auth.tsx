@@ -76,7 +76,7 @@ export default function Auth() {
             </Button>
           </form>
 
-          <p className="text-center mt-4 text-sm text-muted-foreground font-body">
+          {/* <p className="text-center mt-4 text-sm text-muted-foreground font-body">
             {isLogin ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}{' '}
             <button
               onClick={() => setIsLogin(!isLogin)}
@@ -84,7 +84,7 @@ export default function Auth() {
             >
               {isLogin ? 'Regístrate' : 'Inicia sesión'}
             </button>
-          </p>
+          </p> */}
         </CardContent>
       </Card>
     </div>
