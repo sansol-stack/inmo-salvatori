@@ -2,8 +2,8 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createClient } from '@supabase/supabase-js';
 
 const supabase = createClient(
-  process.env.VITE_SUPABASE_PROJECT_URL!,
-  process.env.VITE_SUPABASE_PUBLISHABLE_KEY!
+  process.env.SUPABASE_URL!,
+  process.env.SUPABASE_ANON_KEY!
 );
 
 const BASE_URL = 'https://inmosilvinasalvatori.vercel.app';
