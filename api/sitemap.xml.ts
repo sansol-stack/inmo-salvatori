@@ -6,7 +6,7 @@ const supabase = createClient(
   process.env.SUPABASE_ANON_KEY!
 );
 
-const BASE_URL = 'https://inmosilvinasalvatori.vercel.app';
+const BASE_URL = process.env.VITE_SITE_URL || 'https://inmosilvinasalvatori.vercel.app';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   const { data: properties } = await supabase

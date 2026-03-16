@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import { themeConfig } from "./src/config/theme.config";
 
 export default {
   darkMode: ["class"],
@@ -14,9 +15,9 @@ export default {
     },
     extend: {
       fontFamily: {
-  display: ['Montserrat', 'Inter', 'sans-serif'], 
-  body: ['Inter', 'sans-serif'],
-},
+        display: [themeConfig.fonts.display, 'sans-serif'],
+        body: [themeConfig.fonts.body, 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -24,10 +25,10 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         brand: {
-          magenta: "#D81B60",    // El rosa fuerte del banner
-          dark: "#1A1A1A",       // El negro de los textos
-          gray: "#F5F5F5",       // El gris claro de fondo en la imagen
-          "light-gray": "#E5E5E5" // Gris para bordes
+          magenta: themeConfig.colors.primary,
+          dark: themeConfig.colors.dark,
+          gray: themeConfig.colors.gray,
+          "light-gray": themeConfig.colors.lightGray,
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -94,5 +95,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;
