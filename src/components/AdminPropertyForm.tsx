@@ -9,6 +9,8 @@ import { Switch } from '@/components/ui/switch';
 import { X, Upload, Loader2, ArrowLeft, ArrowRight, MapPin, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
 import type { Property } from '@/types/property';
+import { themeConfig } from '@/config/theme.config';
+import type { PropertyType } from '@/types/property';
 
 interface Props {
   property?: Property | null;
@@ -38,6 +40,7 @@ export function AdminPropertyForm({ property, onSubmit, onCancel, loading }: Pro
   const [bathrooms, setBathrooms] = useState('0');
   const [sqft, setSqft] = useState('0');
   const [type, setType] = useState<'sale' | 'rent'>('sale');
+  const [propertyType, setPropertyType] = useState<PropertyType>('casa');
   const [featured, setFeatured] = useState(false);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
@@ -140,6 +143,7 @@ export function AdminPropertyForm({ property, onSubmit, onCancel, loading }: Pro
       bathrooms: Number(bathrooms),
       sqft: Number(sqft),
       type,
+      property_type: propertyType,
       featured,
       image_urls: imageUrls,
       status,
@@ -184,7 +188,7 @@ export function AdminPropertyForm({ property, onSubmit, onCancel, loading }: Pro
                   <SelectItem value="rented">Alquilada</SelectItem>
                 </SelectContent>
               </Select>
-            </div>            
+            </div>
           </div>
         </div>
 
@@ -274,11 +278,24 @@ export function AdminPropertyForm({ property, onSubmit, onCancel, loading }: Pro
           </div>
         </div>
 
-        {/* AMBIENTES Y M2 */}
-        <div className="grid grid-cols-3 gap-4 md:col-span-2">
+        {/* TIPO DE PROPIEDAD + AMBIENTES Y M2 */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:col-span-2">
+          <div className="col-span-2 md:col-span-1">
+            <Label className="font-bold text-[10px] uppercase tracking-widest">Tipo de Propiedad</Label>
+            <Select value={propertyType} onValueChange={(v: any) => setPropertyType(v)}>
+              <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {themeConfig.propertyTypes
+                  .filter(pt => pt.value !== 'all')
+                  .map(pt => (
+                    <SelectItem key={pt.value} value={pt.value}>{pt.label}</SelectItem>
+                  ))}
+              </SelectContent>
+            </Select>
+          </div>
           <div>
             <Label className="font-bold text-[10px] uppercase tracking-widest">Ambientes</Label>
-            <Input type="number" value={rooms} onChange={(e) => setRooms(e.target.value)} className="none mt-1" />
+            <Input type="number" value={rooms} onChange={(e) => setRooms(e.target.value)} className="mt-1" />
           </div>
           <div>
             <Label className="font-bold text-[10px] uppercase tracking-widest">Baños</Label>
@@ -289,61 +306,61 @@ export function AdminPropertyForm({ property, onSubmit, onCancel, loading }: Pro
             <Input type="number" value={sqft} onChange={(e) => setSqft(e.target.value)} className="mt-1" />
           </div>
         </div>
-      </div>
 
-      {/* DESCRIPCIÓN */}
-      <div>
-        <Label className="font-bold text-[10px] uppercase tracking-widest">Descripción del Inmueble</Label>
-        <Textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          rows={5}
-          className="mt-1"
-        />
-      </div>
-
-      {/* GALERÍA */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <Label className="text-sm font-bold uppercase tracking-widest">Galería de Imágenes</Label>
-          <span className="text-[10px] text-muted-foreground font-bold">{imageUrls.length} FOTOS CARGADAS</span>
+        {/* DESCRIPCIÓN */}
+        <div>
+          <Label className="font-bold text-[10px] uppercase tracking-widest">Descripción del Inmueble</Label>
+          <Textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={5}
+            className="mt-1"
+          />
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-          {imageUrls.map((url, i) => (
-            <div key={url} className="relative aspect-square border border-brand-light-gray overflow-hidden group">
-              <img src={url} className="w-full h-full object-cover" alt="" />
-              {i === 0 && <div className="absolute top-0 left-0 bg-brand-magenta text-white text-[8px] px-2 py-1 font-bold tracking-tighter">PRINCIPAL</div>}
-              <div className="absolute inset-0 bg-brand-dark/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
-                <Button size="icon" variant="secondary" className="h-7 w-7" onClick={() => moveImage(i, 'up')} disabled={i === 0}><ArrowLeft className="h-3 w-3" /></Button>
-                <Button size="icon" variant="destructive" className="h-7 w-7" onClick={() => setImageUrls(imageUrls.filter((_, idx) => idx !== i))}><X className="h-3 w-3" /></Button>
-                <Button size="icon" variant="secondary" className="h-7 w-7" onClick={() => moveImage(i, 'down')} disabled={i === imageUrls.length - 1}><ArrowRight className="h-3 w-3" /></Button>
+
+        {/* GALERÍA */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <Label className="text-sm font-bold uppercase tracking-widest">Galería de Imágenes</Label>
+            <span className="text-[10px] text-muted-foreground font-bold">{imageUrls.length} FOTOS CARGADAS</span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+            {imageUrls.map((url, i) => (
+              <div key={url} className="relative aspect-square border border-brand-light-gray overflow-hidden group">
+                <img src={url} className="w-full h-full object-cover" alt="" />
+                {i === 0 && <div className="absolute top-0 left-0 bg-brand-magenta text-white text-[8px] px-2 py-1 font-bold tracking-tighter">PRINCIPAL</div>}
+                <div className="absolute inset-0 bg-brand-dark/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1">
+                  <Button size="icon" variant="secondary" className="h-7 w-7" onClick={() => moveImage(i, 'up')} disabled={i === 0}><ArrowLeft className="h-3 w-3" /></Button>
+                  <Button size="icon" variant="destructive" className="h-7 w-7" onClick={() => setImageUrls(imageUrls.filter((_, idx) => idx !== i))}><X className="h-3 w-3" /></Button>
+                  <Button size="icon" variant="secondary" className="h-7 w-7" onClick={() => moveImage(i, 'down')} disabled={i === imageUrls.length - 1}><ArrowRight className="h-3 w-3" /></Button>
+                </div>
               </div>
-            </div>
-          ))}
-          <label className="border-2 border-dashed border-brand-light-gray flex flex-col items-center justify-center cursor-pointer hover:bg-brand-gray/5 min-h-[100px] transition-colors">
-            {isUploading ? <Loader2 className="animate-spin text-brand-magenta" /> : <><Upload className="h-5 w-5 text-brand-magenta mb-1" /><span className="text-[8px] font-bold uppercase">Añadir</span></>}
-            <input type="file" multiple accept="image/*" className="hidden" onChange={handleFileUpload} disabled={isUploading} />
-          </label>
+            ))}
+            <label className="border-2 border-dashed border-brand-light-gray flex flex-col items-center justify-center cursor-pointer hover:bg-brand-gray/5 min-h-[100px] transition-colors">
+              {isUploading ? <Loader2 className="animate-spin text-brand-magenta" /> : <><Upload className="h-5 w-5 text-brand-magenta mb-1" /><span className="text-[8px] font-bold uppercase">Añadir</span></>}
+              <input type="file" multiple accept="image/*" className="hidden" onChange={handleFileUpload} disabled={isUploading} />
+            </label>
+          </div>
         </div>
-      </div>
 
-      {/* FOOTER */}
-      <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-brand-light-gray gap-4">
-        <div className="flex items-center gap-3 bg-brand-magenta/5 px-4 py-2 border border-brand-magenta/10 rounded-lg">
-          <Switch checked={featured} onCheckedChange={setFeatured} id="feat" />
-          <Label htmlFor="feat" className="font-bold text-[10px] uppercase tracking-widest text-brand-magenta cursor-pointer">Destacar Propiedad</Label>
-        </div>
-        <div className="flex items-center gap-3 bg-brand-gray/5 px-4 py-2 border border-brand-light-gray rounded-lg">
-              <Switch checked={isVisible} onCheckedChange={setIsVisible} id="visible" />
-              <Label htmlFor="visible" className="font-bold text-[10px] uppercase tracking-widest cursor-pointer">
-                Mostrar en la web
-              </Label>
-            </div>
-        <div className="flex gap-3 w-full md:w-auto">
-          <Button type="button" variant="outline" onClick={onCancel} className="flex-1 md:flex-none text-[10px] rounded-lg font-bold uppercase tracking-widest">Descartar</Button>
-          <Button type="submit" disabled={loading || isUploading} className="flex-1 md:flex-none bg-brand-magenta rounded-lg text-white px-12 text-[10px] font-bold uppercase tracking-widest hover:bg-brand-dark transition-colors">
-            {loading ? 'Procesando...' : property ? 'Guardar Cambios' : 'Publicar Inmueble'}
-          </Button>
+        {/* FOOTER */}
+        <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-brand-light-gray gap-4">
+          <div className="flex items-center gap-3 bg-brand-magenta/5 px-4 py-2 border border-brand-magenta/10 rounded-lg">
+            <Switch checked={featured} onCheckedChange={setFeatured} id="feat" />
+            <Label htmlFor="feat" className="font-bold text-[10px] uppercase tracking-widest text-brand-magenta cursor-pointer">Destacar Propiedad</Label>
+          </div>
+          <div className="flex items-center gap-3 bg-brand-gray/5 px-4 py-2 border border-brand-light-gray rounded-lg">
+            <Switch checked={isVisible} onCheckedChange={setIsVisible} id="visible" />
+            <Label htmlFor="visible" className="font-bold text-[10px] uppercase tracking-widest cursor-pointer">
+              Mostrar en la web
+            </Label>
+          </div>
+          <div className="flex gap-3 w-full md:w-auto">
+            <Button type="button" variant="outline" onClick={onCancel} className="flex-1 md:flex-none text-[10px] rounded-lg font-bold uppercase tracking-widest">Descartar</Button>
+            <Button type="submit" disabled={loading || isUploading} className="flex-1 md:flex-none bg-brand-magenta rounded-lg text-white px-12 text-[10px] font-bold uppercase tracking-widest hover:bg-brand-dark transition-colors">
+              {loading ? 'Procesando...' : property ? 'Guardar Cambios' : 'Publicar Inmueble'}
+            </Button>
+          </div>
         </div>
       </div>
     </form>

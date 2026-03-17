@@ -45,6 +45,20 @@ export const themeConfig = {
     keywords: "inmobiliaria Campana, Silvina Salvatori, alquileres Campana, venta casas Campana",
   },
 
+      // ─── TIPOS DE PROPIEDAD ───────────────────────────────────
+  propertyTypes: [
+    { value: 'all',          label: 'Todos los tipos' },
+    { value: 'casa',         label: 'Casa' },
+    { value: 'departamento', label: 'Departamento' },
+    { value: 'ph',           label: 'PH' },
+    { value: 'local',        label: 'Local comercial' },
+    { value: 'lote',         label: 'Lote / Terreno' },
+    { value: 'oficina',      label: 'Oficina' },
+    { value: 'quinta',       label: 'Quinta / Campo' },
+    { value: 'cochera',      label: 'Cochera' },
+    { value: 'cabaña',       label: 'Cabaña' },
+  ] as const,
+
   // ─── HERO ─────────────────────────────────────────────────
   hero: {
     badge: "Excelencia en Campana",

@@ -12,6 +12,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useProperties, useCreateProperty, useUpdateProperty, useDeleteProperty } from '@/hooks/useProperties';
 import { toast } from 'sonner';
 import type { Property } from '@/types/property';
+import { themeConfig } from '@/config/theme.config';
 
 export default function Admin() {
   const { user, loading: authLoading, signOut } = useAuth();
@@ -141,6 +142,7 @@ export default function Admin() {
                     <TableHead className="font-bold uppercase text-[10px] tracking-widest p-2">Ubicación</TableHead>
                     <TableHead className="font-bold uppercase text-[10px] tracking-widest text-center">Estado</TableHead>
                     <TableHead className="font-bold uppercase text-[10px] tracking-widest text-center">Tipo</TableHead>
+                    <TableHead className="font-bold uppercase text-[10px] tracking-widest text-center">Inmueble</TableHead>
                     <TableHead className="font-bold uppercase text-[10px] tracking-widest">Precio</TableHead>
                     <TableHead className="font-bold uppercase text-[10px] tracking-widest text-center px-0">Visibilidad</TableHead>
                     <TableHead className="font-bold uppercase text-[10px] tracking-wides w-px text-center whitespace-nowrap">Acciones</TableHead>
@@ -149,13 +151,13 @@ export default function Admin() {
                 <TableBody>
                   {isLoading ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center py-8 font-body text-muted-foreground">
+                      <TableCell colSpan={8} className="text-center py-8 font-body text-muted-foreground">
                         Cargando propiedades...
                       </TableCell>
                     </TableRow>
                   ) : properties?.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} className="text-center py-8 font-body text-muted-foreground">
+                      <TableCell colSpan={8} className="text-center py-8 font-body text-muted-foreground">
                         No hay propiedades. Crea la primera.
                       </TableCell>
                     </TableRow>
@@ -183,6 +185,13 @@ export default function Admin() {
                         <TableCell className="px-4 py-2 md:p-4 text-center">
                           <Badge variant="secondary" className="font-body">
                             {p.type === 'sale' ? 'Venta' : 'Alquiler'}
+                          </Badge>
+                        </TableCell>
+
+                        {/* COLUMNA: TIPO DE INMUEBLE */}
+                        <TableCell className="px-4 py-2 md:p-4 text-center">
+                          <Badge variant="outline" className="font-body text-[10px] uppercase tracking-wider">
+                            {themeConfig.propertyTypes.find(pt => pt.value === p.property_type)?.label || p.property_type}
                           </Badge>
                         </TableCell>
 
